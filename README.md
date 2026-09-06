@@ -1199,7 +1199,7 @@ SOFTWARE.
 - **Issues**: [GitHub Issues](https://github.com/ruvnet/wifi-densepose/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/ruvnet/wifi-densepose/discussions)
 - **PyPI Package**: [https://pypi.org/project/wifi-densepose/](https://pypi.org/project/wifi-densepose/)
-- **Email**: support@wifi-densepose.com
+- **Email**: davidak02@outlook.com
 - **Discord**: [Join our community](https://discord.gg/wifi-densepose)
 
 ---
