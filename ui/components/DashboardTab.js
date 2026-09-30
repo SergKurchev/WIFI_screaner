@@ -130,8 +130,8 @@ export class DashboardTab {
     }
 
     // Update metrics
-    if (health.metrics) {
-      this.updateSystemMetrics(health.metrics);
+    if (health.system_metrics) {
+      this.updateSystemMetrics(health.system_metrics);
     }
   }
 
@@ -321,15 +321,18 @@ export class DashboardTab {
   updateStats(stats) {
     if (!stats) return;
 
+    // Backend nests the actual numbers under `statistics`
+    const statistics = stats.statistics || stats;
+
     // Update detection count
     const detectionCount = this.container.querySelector('.detection-count');
-    if (detectionCount && stats.total_detections !== undefined) {
-      detectionCount.textContent = this.formatNumber(stats.total_detections);
+    if (detectionCount && statistics.total_detections !== undefined) {
+      detectionCount.textContent = this.formatNumber(statistics.total_detections);
     }
 
     // Update accuracy if available
-    if (this.statsElements.accuracy && stats.average_confidence !== undefined) {
-      this.statsElements.accuracy.textContent = `${(stats.average_confidence * 100).toFixed(1)}%`;
+    if (this.statsElements.accuracy && statistics.average_confidence !== undefined) {
+      this.statsElements.accuracy.textContent = `${(statistics.average_confidence * 100).toFixed(1)}%`;
     }
   }
 

@@ -58,16 +58,18 @@ class PoseStreamHandler:
             return
         
         self.is_streaming = True
+        await self.stream_service.start()
         self.stream_task = asyncio.create_task(self._stream_loop())
         logger.info("Pose streaming started")
-    
+
     async def stop_streaming(self):
         """Stop pose data streaming."""
         if not self.is_streaming:
             return
-        
+
         self.is_streaming = False
-        
+        await self.stream_service.stop()
+
         if self.stream_task:
             self.stream_task.cancel()
             try:

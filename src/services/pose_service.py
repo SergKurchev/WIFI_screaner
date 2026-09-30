@@ -448,7 +448,7 @@ class PoseService:
                     "bounding_box": pose["bounding_box"],
                     "zone_id": zone_ids[0] if zone_ids else "zone_1",
                     "activity": pose["activity"],
-                    "timestamp": datetime.fromisoformat(pose["timestamp"])
+                    "timestamp": pose["timestamp"]
                 }
                 
                 if include_keypoints:

@@ -86,6 +86,24 @@ export class WebSocketService {
       // Set up event handlers
       this.setupEventHandlers(url, ws, handlers);
 
+      // The 'open' event already fired while awaiting createWebSocketWithTimeout,
+      // so the onopen handler just attached above will never run for this
+      // connection — mark it connected here instead.
+      if (ws.readyState === WebSocket.OPEN) {
+        connectionData.status = 'connected';
+        connectionData.lastActivity = Date.now();
+        this.reconnectAttempts.set(url, 0);
+        this.notifyConnectionState(url, 'connected');
+
+        if (handlers.onOpen) {
+          try {
+            handlers.onOpen();
+          } catch (error) {
+            this.logger.error('Error in onOpen handler', { url, error: error.message });
+          }
+        }
+      }
+
       // Start heartbeat
       this.startHeartbeat(url);
 
