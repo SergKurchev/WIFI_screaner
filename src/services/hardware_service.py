@@ -11,8 +11,9 @@ from datetime import datetime, timedelta
 import numpy as np
 
 from src.config.settings import Settings
-from src.config.domains import DomainConfig
+from src.config.domains import DomainConfig, HardwareType, RouterConfig
 from src.core.router_interface import RouterInterface
+from src.core.huawei_router_interface import HuaweiHiLinkRouterInterface
 
 logger = logging.getLogger(__name__)
 
@@ -117,16 +118,7 @@ class HardwareService:
                 
                 router_id = router_config.router_id
                 
-                # Create router interface
-                router_interface = RouterInterface(
-                    router_id=router_id,
-                    host=router_config.ip_address,
-                    port=22,  # Default SSH port
-                    username="admin",  # Default username
-                    password="admin",  # Default password
-                    interface=router_config.interface,
-                    mock_mode=self.settings.mock_hardware
-                )
+                router_interface = self._create_router_interface(router_config)
                 
                 # Connect to router (always connect, even in mock mode)
                 await router_interface.connect()
@@ -143,6 +135,29 @@ class HardwareService:
             self.logger.error(f"Failed to initialize routers: {e}")
             raise
     
+    def _create_router_interface(self, router_config: RouterConfig) -> RouterInterface:
+        """Create the interface matching the router's hardware type."""
+        if router_config.hardware_type == HardwareType.HUAWEI_HILINK:
+            return HuaweiHiLinkRouterInterface(
+                router_id=router_config.router_id,
+                host=router_config.ip_address,
+                transmitter_mac=router_config.mac_address,
+                udp_host=self.settings.esp32_csi_udp_host,
+                udp_port=self.settings.esp32_csi_udp_port,
+                window_size=self.settings.esp32_csi_window_size,
+                mock_mode=self.settings.mock_hardware
+            )
+
+        return RouterInterface(
+            router_id=router_config.router_id,
+            host=router_config.ip_address,
+            port=22,  # Default SSH port
+            username="admin",  # Default username
+            password="admin",  # Default password
+            interface=router_config.interface,
+            mock_mode=self.settings.mock_hardware
+        )
+
     async def _disconnect_routers(self):
         """Disconnect from all routers."""
         for router_id, interface in self.router_interfaces.items():

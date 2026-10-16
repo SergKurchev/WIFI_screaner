@@ -583,6 +583,11 @@ WiFi DensePose works with standard WiFi equipment that supports CSI extraction:
 - Atheros AR9300 series
 - Broadcom BCM4366 series
 - Qualcomm QCA9984 series
+- ESP32 with [ESP32-CSI-Tool](https://github.com/StevenMHernandez/ESP32-CSI-Tool) (receiver for any 802.11n router)
+
+#### Routers without CSI support (Huawei B315s-22 and other HiLink LTE routers)
+Closed-firmware routers cannot export CSI. Use the router as the transmitter and an ESP32 as the
+CSI receiver (`hardware_type: huawei_hilink`). See [docs/hardware/huawei-b315-esp32.md](docs/hardware/huawei-b315-esp32.md).
 
 ### Physical Setup
 

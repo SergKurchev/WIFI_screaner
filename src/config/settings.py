@@ -77,6 +77,9 @@ class Settings(BaseSettings):
     wifi_interface: str = Field(default="wlan0", description="WiFi interface name")
     csi_buffer_size: int = Field(default=1000, description="CSI data buffer size")
     hardware_polling_interval: float = Field(default=0.1, description="Hardware polling interval in seconds")
+    esp32_csi_udp_host: str = Field(default="0.0.0.0", description="Bind address for ESP32 CSI rows (from esp32_serial_bridge.py)")
+    esp32_csi_udp_port: int = Field(default=5500, description="UDP port for ESP32 CSI rows")
+    esp32_csi_window_size: int = Field(default=100, description="Number of ESP32 CSI frames per sample window")
     
     # CSI Processing settings
     csi_sampling_rate: int = Field(default=1000, description="CSI sampling rate")

@@ -9,6 +9,7 @@ services:
     container_name: wifi-densepose-dev
     ports:
       - "8000:8000"
+      - "5500:5500/udp"  # ESP32 CSI rows from scripts/esp32_serial_bridge.py
     volumes:
       - .:/app
       - wifi_densepose_logs:/app/logs

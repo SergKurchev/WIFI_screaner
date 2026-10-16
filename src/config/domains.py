@@ -42,6 +42,7 @@ class HardwareType(str, Enum):
     ACCESS_POINT = "access_point"
     REPEATER = "repeater"
     MESH_NODE = "mesh_node"
+    HUAWEI_HILINK = "huawei_hilink"  # closed firmware: router transmits, ESP32 captures CSI
     CUSTOM = "custom"
 
 
@@ -285,13 +286,20 @@ class DomainConfig:
             z_max=3.0
         )
         
-        # Example router
+        # Home router: Huawei B315s-22 (LTE CPE, 802.11b/g/n, 2.4 GHz only).
+        # CSI is captured by an ESP32 from frames sent by this MAC (the router's BSSID);
+        # an ESP32 sees one antenna and 52 L-LTF subcarriers on a 20 MHz channel.
         self.routers["main_router"] = RouterConfig(
             router_id="main_router",
-            name="Main Router",
-            hardware_type=HardwareType.ROUTER,
-            ip_address="192.168.1.1",
-            mac_address="00:11:22:33:44:55",
+            name="Huawei B315s-22",
+            hardware_type=HardwareType.HUAWEI_HILINK,
+            ip_address="192.168.8.1",
+            mac_address="14:3c:c3:9d:11:fd",
+            interface="esp32",
+            channel=1,
+            frequency=2.4,
+            csi_subcarriers=52,
+            antenna_count=1,
             x_position=2.5,
             y_position=2.0,
             z_position=2.5
